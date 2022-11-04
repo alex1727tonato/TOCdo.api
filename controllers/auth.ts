@@ -1,3 +1,4 @@
+import { crearToken } from '@/libs/auth'
 import { hash } from '@/libs/utils'
 import Usuarios from '@/services/Usuarios'
 import { Next, Request, Response } from 'restify'
@@ -27,7 +28,14 @@ export default {
         res.send(new BadRequestError('La contraseña es incorrecta.'))
         return next()
       }
-      res.json(usuario)
+      res.json({
+        nombre: usuario.nombre,
+        usuario: usuario.username,
+        token: crearToken({
+          usuario: usuario._id,
+          tipo: usuario.tipo,
+        }),
+      })
       next()
     } catch (error) {
       next(error)
