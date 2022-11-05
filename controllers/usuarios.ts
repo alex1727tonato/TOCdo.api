@@ -5,9 +5,7 @@ import { Next, Request, Response } from 'restify'
 export default {
   async post(req: Request, res: Response, next: Next) {
     try {
-      console.log('CREANDO USUARIO')
       const password = generateRandomString()
-      console.log('CONTRASE;A', password)
       req.body.password = hash(password)
       const usuario = await Usuarios.create(req.body)
       res.json(usuario)
