@@ -1,4 +1,6 @@
 import { Router } from 'restify-router'
+import auth from './auth'
+import usuarios from './usuarios'
 
 const router = new Router()
 router.get('/', (req, res, next) => {
@@ -9,5 +11,8 @@ router.get('/', (req, res, next) => {
   })
   next()
 })
+
+router.add('/auth', auth)
+router.add('/usuarios', usuarios)
 
 export default router
