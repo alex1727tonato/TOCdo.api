@@ -1,3 +1,5 @@
 export enum Coleciones {
-  USUARIOS = 'users',
+  EMPRESAS = 'empresas',
+  ADMINISTRADORES = 'administradores',
+  ROLES = 'roles',
 }

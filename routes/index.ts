@@ -1,6 +1,8 @@
-import { Router } from 'restify-router'
 import auth from './auth'
-import usuarios from './usuarios'
+import roles from './roles'
+import empresas from './empresas'
+import admin from './administradores'
+import { Router } from 'restify-router'
 
 const router = new Router()
 router.get('/', (req, res, next) => {
@@ -13,6 +15,8 @@ router.get('/', (req, res, next) => {
 })
 
 router.add('/auth', auth)
-router.add('/usuarios', usuarios)
+router.add('/rol', roles)
+router.add('/admin', admin)
+router.add('/empresas', empresas)
 
 export default router

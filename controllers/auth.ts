@@ -1,21 +1,45 @@
-import { crearToken } from '@/libs/auth'
 import { hash } from '@/libs/utils'
-import Usuarios from '@/services/Usuarios'
+import { crearToken } from '@/libs/auth'
+import Empresas from '@/services/Empresas'
 import { Next, Request, Response } from 'restify'
 import { BadRequestError, NotFoundError } from 'restify-errors'
+import Administradores from '@/services/Administradores'
 
 export default {
   async post(req: Request, res: Response, next: Next) {
     try {
-      const { username, password } = req.body
+      const { username, password, idEmpresa } = req.body
       if (!username || !password) {
         res.send(
           new BadRequestError('No se proporciono el usuario y contraseña'),
         )
         return next()
       }
-      const usuario = await Usuarios.findOne({ username })
-      if (!usuario) {
+      const empresa = await Empresas.findOne({ _id: idEmpresa })
+      if (!empresa) {
+        res.send(new NotFoundError('No se encontro la empresa'))
+        next()
+      }
+
+      const usuario = empresa.usuarios.find(
+        (usuario) => usuario.username === username,
+      )
+      const [administrador] = await Administradores.aggregate([
+        {
+          $match: {
+            $and: [
+              { username },
+              {
+                $or: [
+                  { type: 'master' },
+                  { type: 'super', businesses: empresa._id },
+                ],
+              },
+            ],
+          },
+        },
+      ])
+      if (!usuario && !administrador) {
         res.send(new NotFoundError('No se encontro el usuario'))
         return next()
       }
@@ -27,8 +51,8 @@ export default {
         nombre: usuario.nombre,
         usuario: usuario.username,
         token: crearToken({
+          empresa: empresa._id,
           usuario: usuario._id,
-          tipo: usuario.tipo,
         }),
       })
       next()
