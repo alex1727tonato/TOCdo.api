@@ -21,14 +21,14 @@ const Usuario = new Schema<Usuario>({
   username: { type: String, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true },
-  rol: { type: SchemaTypes.ObjectId, required: true, ref: Coleciones.ROLES },
+  rol: { type: SchemaTypes.ObjectId, ref: Coleciones.ROLES },
 })
 
 interface Empresa {
   _id: Types.ObjectId
   nombre: string
   ruc: string
-  usuarios: Types.DocumentArray<Usuario>
+  usuarios?: Types.DocumentArray<Usuario>
 }
 
 const Empresa: SchemaDefinition<Empresa> = {

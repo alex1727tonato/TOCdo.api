@@ -7,7 +7,7 @@ interface Administrador {
   password: string
   tipo: 'master' | 'super'
   email: string
-  empresas: Types.Array<Types.ObjectId>
+  empresas?: Types.Array<Types.ObjectId>
   rol?: Types.ObjectId
 }
 
@@ -17,7 +17,7 @@ const Administrador: SchemaDefinition<Administrador> = {
   password: { type: String, required: true },
   tipo: { type: String, enum: ['master', 'super'], required: true },
   email: { type: String, required: true },
-  empresas: [{ type: SchemaTypes.ObjectId, required: true }],
+  empresas: [{ type: SchemaTypes.ObjectId }],
   rol: { type: SchemaTypes.ObjectId },
 }
 

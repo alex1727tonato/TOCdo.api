@@ -6,6 +6,35 @@ import { BadRequestError, NotFoundError } from 'restify-errors'
 export default {
   async post(req: Request, res: Response, next: Next) {
     try {
+      console.log('CREANDO EMPRESA: ')
+      const { nombre, ruc } = req.body
+
+      if (!nombre || !ruc) {
+        res.send(
+          new BadRequestError('No se proporciono la información necesaria'),
+        )
+        return next()
+      }
+
+      const empresaExistente = await Empresas.findOne({ ruc })
+
+      if (empresaExistente) {
+        res.send(
+          new BadRequestError(`Ya existe una empresa con el RUC: ${ruc}`),
+        )
+        return next()
+      }
+
+      const empresa = await Empresas.create(req.body)
+
+      res.json(empresa)
+      next()
+    } catch (error) {
+      next(error)
+    }
+  },
+  async postUsuario(req: Request, res: Response, next: Next) {
+    try {
       const { nombre, username, email } = req.body
 
       const empresa = await Empresas.findOne({ _id: req.payload.empresa })
@@ -18,6 +47,7 @@ export default {
         next()
       }
       const password = generateRandomString()
+      console.log(password)
       const usuario = empresa.usuarios.create({
         nombre,
         username,

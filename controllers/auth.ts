@@ -2,20 +2,20 @@ import { hash } from '@/libs/utils'
 import { crearToken } from '@/libs/auth'
 import Empresas from '@/services/Empresas'
 import { Next, Request, Response } from 'restify'
-import { BadRequestError, NotFoundError } from 'restify-errors'
 import Administradores from '@/services/Administradores'
+import { BadRequestError, NotFoundError } from 'restify-errors'
 
 export default {
   async post(req: Request, res: Response, next: Next) {
     try {
-      const { username, password, idEmpresa } = req.body
+      const { username, password, ruc } = req.body
       if (!username || !password) {
         res.send(
           new BadRequestError('No se proporciono el usuario y contraseña'),
         )
         return next()
       }
-      const empresa = await Empresas.findOne({ _id: idEmpresa })
+      const empresa = await Empresas.findOne({ ruc })
       if (!empresa) {
         res.send(new NotFoundError('No se encontro la empresa'))
         next()
@@ -31,8 +31,8 @@ export default {
               { username },
               {
                 $or: [
-                  { type: 'master' },
-                  { type: 'super', businesses: empresa._id },
+                  { tipo: 'master' },
+                  { tipo: 'super', empresas: empresa._id },
                 ],
               },
             ],
@@ -43,16 +43,21 @@ export default {
         res.send(new NotFoundError('No se encontro el usuario'))
         return next()
       }
-      if (!(usuario?.password === hash(password))) {
+      if (
+        !(
+          usuario?.password === hash(password) ||
+          administrador?.password === hash(password)
+        )
+      ) {
         res.send(new BadRequestError('La contraseña es incorrecta.'))
         return next()
       }
       res.json({
-        nombre: usuario.nombre,
-        usuario: usuario.username,
+        nombre: usuario ? usuario.nombre : administrador.nombre,
+        usuario: usuario ? usuario.username : administrador.username,
         token: crearToken({
           empresa: empresa._id,
-          usuario: usuario._id,
+          usuario: usuario ? usuario._id : administrador._id,
         }),
       })
       next()

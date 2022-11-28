@@ -6,7 +6,7 @@ export default {
   async post(req: Request, res: Response, next: Next) {
     try {
       const password = generateRandomString()
-      console.log('PASSWORD: ', password)
+      console.log('PASSWORD', password)
       req.body.password = hash(password)
       const admin = await Administradores.create(req.body)
       res.json(admin)
