@@ -9,10 +9,6 @@ export default {
         res.send(new BadRequestError('Deben existir modulos'))
         next()
       }
-      if (req.body?.acciones?.length === 0) {
-        res.send(new BadRequestError('Deben existir acciones'))
-        next()
-      }
       const rol = await Roles.create(req.body)
       res.json(rol)
       next()

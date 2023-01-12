@@ -35,7 +35,7 @@ export default {
   },
   async postUsuario(req: Request, res: Response, next: Next) {
     try {
-      const { nombre, username, email } = req.body
+      const { nombre, username, email, rol } = req.body
 
       const empresa = await Empresas.findOne({ _id: req.payload.empresa })
       if (!empresa) {
@@ -53,6 +53,7 @@ export default {
         username,
         password: hash(password),
         email,
+        rol,
       })
       empresa.usuarios.push(usuario)
       await empresa.save()

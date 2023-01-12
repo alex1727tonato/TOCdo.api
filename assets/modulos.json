@@ -1,0 +1,53 @@
+[
+  {
+    "key": "business",
+    "label": "Mi empresa",
+    "icon": "home",
+    "submodules": [
+      {
+        "key": "users",
+        "label": "Usuarios",
+        "icon": "team"
+      },
+      {
+        "key": "roles",
+        "label": "Roles",
+        "icon": "tag"
+      }
+    ]
+  },
+  {
+    "key": "post",
+    "label": "Posteo",
+    "icon": "container",
+    "submodules": [
+      {
+        "key": "assist-control",
+        "label": "Control asistencia",
+        "icon": "schedule"
+      },
+      {
+        "key": "tracing",
+        "label": "Seguimiento",
+        "icon": "search"
+      }
+    ]
+  },
+  {
+    "key": "proyects",
+    "label": "Proyectos",
+    "icon": "project",
+    "submodules": [
+      {
+        "key": "my-proyects",
+        "label": "Mis proyectos",
+        "icon": "folder-open"
+      },
+      {
+        "key": "tasks",
+        "label": "Tareas",
+        "icon": "bars"
+      }
+    ]
+  }
+]
